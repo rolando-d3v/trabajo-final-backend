@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 
 
 var storageOne = multer.diskStorage({
-  destination: "Data",
+  destination: "upload",
 
   filename: async function (req, file, cb) {
     const fecha = dayjs().format("YYYY-MM-DD");

@@ -1,15 +1,8 @@
-import express, { Request, RequestHandler, Response }  from "express";
+import express, { Request, RequestHandler, Response } from "express";
 import cors from "cors";
-
-import { PrismaClient } from "@prisma/client";
-
-// import { PrismaClient as PrismaClient2 } from '@prisma/client'
-// import{z} from "zod";
-
 import morgan from "morgan";
 import { env_entorno } from "./env";
-
-
+import productoRoutes from "./api/producto/producto.routes";
 
 //server app
 const app = express();
@@ -26,21 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-
-
-const prisma = new PrismaClient()
-
-
+// static files
+app.use(express.static("upload"));
 
 
 
-
-app.get('/red', async  (req : Request, res: Response) => {
-
+app.use('/producto', productoRoutes)
 
 
-  // const pepe = await client2.
-  // const pepe = await prisma.documento.findFirstOrThrow({})
-  
 
-} )
