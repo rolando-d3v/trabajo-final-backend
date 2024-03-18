@@ -1,7 +1,7 @@
 import express, { Request, RequestHandler, Response }  from "express";
 import cors from "cors";
 
-// import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // import { PrismaClient as PrismaClient2 } from '@prisma/client'
 // import{z} from "zod";
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 
-// const prisma = new PrismaClient()
+const prisma = new PrismaClient()
 
 
 
