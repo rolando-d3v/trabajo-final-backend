@@ -14,8 +14,10 @@ var storageOne = multer.diskStorage({
 
   filename: async function (req, file, cb) {
     const fecha = dayjs().format("YYYY-MM-DD");
-    let url_doc = fecha + "--" + short.generate() + "--" + "firmado digital" + '[R].pdf';
-  
+    const partes = file.originalname.split('.');
+    const extension = partes[partes.length - 1];
+    let url_doc = fecha + "--" + short.generate() + "--" + "image." + extension;
+
     cb(null, url_doc);
   },
 });
@@ -24,16 +26,19 @@ var storageOne = multer.diskStorage({
 
 export const upload = multer({
   storage: storageOne,
-}).any();
+}).single('filex');
 
 
 //?  RECIBE Y DESCARGA EL DOC FIRMANDO
 //? ****************************************************************************************************************/
-export const firmaFileUpload = async (req: Request, res: Response) => {
+export const productoCreateUpload = async (req: Request, res: Response) => {
   try {
 
 
-    req.body.thumbnails = req.files;
+    const { description, title, precio } = req.body
+
+
+    req.body.thumbnails = req.file;
     const Rfile = req.body.thumbnails;
 
     // const pepe = {
@@ -47,25 +52,26 @@ export const firmaFileUpload = async (req: Request, res: Response) => {
     //   size: 416771
     // }
 
-    const FileNumber = Rfile[0].fieldname
-    const FileNamex = Rfile[0].filename
+    // const FileNamex = Rfile[0].filename
 
-    console.log(Rfile[0].fieldname);
-    console.log(Rfile[0].filename);
-    console.log(Rfile[0].originalname);
+    console.log(Rfile);
 
-
-    //  const firmadoDoc = await prisma.documento.update({
-    //   where: {
-    //     ID_DOCUMENTO_I: Number(FileNumber)
-    //   },
-    //   data: {
-    //     URL_DOC_T: FileNamex
-    //   }
-    //  })
+    // console.log(Rfile[0].filename);
+    // console.log(Rfile[0].originalname);
 
 
-    // return res.json({ msn: "File Firmado success 😃 ✔️", firmadoDoc });
+    const producto = await prisma.producto.create({
+      data: {
+        DESCRIPTION_V: description,
+        TITLE_V: title,
+        URL_FILE_T: Rfile.filename,
+        PRECIO_PRODUCTO_D: precio
+      },
+    });
+
+
+    return res.json({ msn: "Producto created success 😃 ✔️", producto });
+    // return res.json({ msn: "Producto created success 😃 ✔️"});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
@@ -74,7 +80,7 @@ export const firmaFileUpload = async (req: Request, res: Response) => {
 
 
 
-//? ENVIA LOS ARGUMENTOS PARA FIRMA  faltaaaaxxxxxxxxxxx
+//? ENVIA LOS ARGUMENTOS
 //? ******************************************************************************************************************/
 export const firmaArgumentos = async (req: Request, res: Response) => {
   try {
@@ -90,6 +96,22 @@ export const firmaArgumentos = async (req: Request, res: Response) => {
     //   },
     // });
     return res.json({ msn: "Registro success 2023 😃 ✔️" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
+  }
+};
+
+
+//? GET ALL PRODUCTOS
+//? ******************************************************************************************************************/
+export const getAllProductos = async (req: Request, res: Response) => {
+  try {
+
+    const pepe = req.body
+    const list_pro = await prisma.producto.findMany({});
+
+    return res.json({ msn: "lista productos", list_pro });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });

@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { env_entorno } from "./env";
 import productoRoutes from "./api/producto/producto.routes";
+import usuarioRoutes from "./api/usuario/usuario.routes";
 
 //server app
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.static("upload"));
 
 
 app.use('/producto', productoRoutes)
+app.use('/usuario', usuarioRoutes)
 
 
 

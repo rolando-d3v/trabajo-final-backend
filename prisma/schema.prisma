@@ -7,20 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model doc_usuarios {
-  ID_USER Int     @id @default(autoincrement())
-  NAME    String? @db.VarChar(45)
-  DNI     String? @db.VarChar(8)
+model compra_producto {
+  ID_COMPRA_PRO_I      Int      @id @default(autoincrement())
+  CLIENTE_DNI_I        String   @db.Char(8)
+  DESCRIPTION_COMPRA_V String   @db.Text
+  PRECIO_TOTAL_D       Decimal? @db.Decimal(10, 0)
+  LIST_PRODUCTOS_J     Json
+  ESTADO_B             Boolean? @default(dbgenerated("(true)"))
+  FECHA_CREATE_D       DateTime @default(now()) @db.DateTime(0)
+  FECHA_UPDATE_D       DateTime @default(now()) @db.Timestamp(0)
+  usuario              usuario  @relation(fields: [CLIENTE_DNI_I], references: [ID_DNI_C], onDelete: Cascade, map: "FK_cliente_dni")
+
+  @@index([CLIENTE_DNI_I], map: "FK_cliente_dni")
 }
 
-model usuarios {
-  ID_USER Int     @id @default(autoincrement())
-  NAME    String? @db.VarChar(45)
-  DNI     String? @db.VarChar(8)
+model producto {
+  ID_PRODUCTO_I     Int      @id @default(autoincrement())
+  TITLE_V           String   @db.VarChar(255)
+  DESCRIPTION_V     String   @db.Text
+  PRECIO_PRODUCTO_D Decimal  @db.Decimal(10, 0)
+  URL_FILE_T        String   @db.Text
+  ESTADO_B          Boolean? @default(dbgenerated("(true)"))
+  FECHA_CREATE_D    DateTime @default(now()) @db.DateTime(0)
+  FECHA_UPDATE_D    DateTime @default(now()) @db.Timestamp(0)
 }
 
-model pepe {
-  ID_USER Int     @id @default(autoincrement())
-  NAME    String? @db.VarChar(45)
-  DNI     String? @db.VarChar(8)
+model usuario {
+  ID_DNI_C        String            @id @db.Char(8)
+  AP_PATERNO_V    String?           @db.VarChar(50)
+  AP_MATERNO_V    String?           @db.VarChar(50)
+  NOMBRE_V        String?           @db.VarChar(100)
+  CORREO_V        String            @db.VarChar(200)
+  PASSWORD_V      String            @db.VarChar(255)
+  FOTO_V          String?           @default(dbgenerated("(_utf8mb4\\'user.png\\')")) @db.VarChar(100)
+  ESTADO_B        Boolean?          @default(dbgenerated("(true)"))
+  compra_producto compra_producto[]
 }
