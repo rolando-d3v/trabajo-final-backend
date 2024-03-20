@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { env_entorno } from "./env";
 import productoRoutes from "./api/producto/producto.routes";
 import usuarioRoutes from "./api/usuario/usuario.routes";
+import compraProductoRoutes from "./api/compra_producto/compra_producto.routes";
 
 //server app
 const app = express();
@@ -24,9 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("upload"));
 
 
-
+//routes
 app.use('/producto', productoRoutes)
 app.use('/usuario', usuarioRoutes)
+app.use('/compra-producto', compraProductoRoutes)
 
 
 

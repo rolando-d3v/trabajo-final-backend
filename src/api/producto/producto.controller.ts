@@ -65,7 +65,7 @@ export const productoCreateUpload = async (req: Request, res: Response) => {
         DESCRIPTION_V: description,
         TITLE_V: title,
         URL_FILE_T: Rfile.filename,
-        PRECIO_PRODUCTO_D: precio
+        PRECIO_D: parseFloat(precio)
       },
     });
 
