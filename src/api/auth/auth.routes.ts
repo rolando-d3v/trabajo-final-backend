@@ -5,7 +5,7 @@ import * as CtrlAuth from "./auth.controller";
 
 
 const router = Router();
-router.post("/", CtrlAuth.authLoginUser);
+router.post("/user", CtrlAuth.authLoginUser);
 router.post("/login", CtrlAuth.postAuthLogin);
 
 export default router;

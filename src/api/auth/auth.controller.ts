@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 // import { v4 as uuidv4 } from "uuid";
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
@@ -18,9 +19,6 @@ export const authLoginUser = async (req: Request, res: Response) => {
     const dni = req.body.dni;
     const password = req.body.password;
 
-
-
-
     if (!dni || !password) {
       return res
         .status(500)
@@ -29,6 +27,20 @@ export const authLoginUser = async (req: Request, res: Response) => {
         });
     }
 
+    const user = await prisma.usuario.findFirst({
+      where: {
+        ID_DNI_C: dni
+      }
+    })
+    if (!user) {
+      return res.status(500).json({ msj: "Error: no hay usuarios❗️" });
+    }
+
+
+    const pass = bcrypt.compare(password, user.PASSWORD_V)
+    if (!pass) {
+      return res.status(500).json({ msj: "Error: Password incorrecto❗️" });
+    }
 
 
     const token = jwt.sign(
@@ -42,7 +54,6 @@ export const authLoginUser = async (req: Request, res: Response) => {
     return res.json({
       msj: "Login successfully 😃 ✔️",
       token,
-
     })
 
 
