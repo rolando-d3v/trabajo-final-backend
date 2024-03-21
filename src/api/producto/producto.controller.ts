@@ -22,8 +22,6 @@ var storageOne = multer.diskStorage({
   },
 });
 
-
-
 export const upload = multer({
   storage: storageOne,
 }).single('filex');
@@ -33,32 +31,10 @@ export const upload = multer({
 //? ****************************************************************************************************************/
 export const productoCreateUpload = async (req: Request, res: Response) => {
   try {
-
-
     const { description, title, precio } = req.body
-
-
     req.body.thumbnails = req.file;
     const Rfile = req.body.thumbnails;
-
-    // const pepe = {
-    //   fieldname: '182',
-    //   originalname: 'firmado%5BR%5D.pdf',
-    //   encoding: 'binary',
-    //   mimetype: 'application/octet-stream',
-    //   destination: 'Data',
-    //   filename: '70a37cd9-1b54-41ac-a6bc-e82efac52157--[R].pdf',
-    //   path: 'Data\\70a37cd9-1b54-41ac-a6bc-e82efac52157--[R].pdf',
-    //   size: 416771
-    // }
-
-    // const FileNamex = Rfile[0].filename
-
     console.log(Rfile);
-
-    // console.log(Rfile[0].filename);
-    // console.log(Rfile[0].originalname);
-
 
     const producto = await prisma.producto.create({
       data: {
@@ -71,7 +47,6 @@ export const productoCreateUpload = async (req: Request, res: Response) => {
 
 
     return res.json({ msn: "Producto created success 😃 ✔️", producto });
-    // return res.json({ msn: "Producto created success 😃 ✔️"});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
@@ -80,36 +55,58 @@ export const productoCreateUpload = async (req: Request, res: Response) => {
 
 
 
-//? ENVIA LOS ARGUMENTOS
-//? ******************************************************************************************************************/
-export const firmaArgumentos = async (req: Request, res: Response) => {
-  try {
-
-    const pepe = req.body
-
-    console.log(pepe);
-
-    // const tipoDoc = await prisma.tipo_documento.create({
-    //   data: {
-    //     DESC_CORTA_V: req.body.desc_corta,
-    //     DESC_LARGA_V: req.body.desc_larga,
-    //   },
-    // });
-    return res.json({ msn: "Registro success 2023 😃 ✔️" });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
-  }
-};
 
 
 //? GET ALL PRODUCTOS
 //? ******************************************************************************************************************/
 export const getAllProductos = async (req: Request, res: Response) => {
   try {
+    const list_pro = await prisma.producto.findMany({
+    });
 
-    const pepe = req.body
-    const list_pro = await prisma.producto.findMany({});
+    return res.json({ msn: "lista productos", list_pro });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
+  }
+};
+
+//? UPDATED A PRODUCTO
+//? ******************************************************************************************************************/
+export const getUpdatedProducto = async (req: Request, res: Response) => {
+  try {
+    const { description, title, precio } = req.body
+
+    const idx = req.params.id
+
+    const list_pro = await prisma.producto.update({
+      where: { ID_PRODUCTO_I: parseInt(idx) },
+      data: {
+        DESCRIPTION_V: description,
+        TITLE_V: title,
+        PRECIO_D: parseFloat(precio)
+      },
+    });
+
+    return res.json({ msn: "lista productos", list_pro });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ msn: "Error: server 😕 ❗️❗️", err });
+  }
+};
+
+
+
+//? DELETED A PRODUCTO
+//? ******************************************************************************************************************/
+export const getDeleteProducto = async (req: Request, res: Response) => {
+  try {
+
+    const idx = req.params.id
+
+    const list_pro = await prisma.producto.delete({
+      where: { ID_PRODUCTO_I: parseInt(idx) },
+    });
 
     return res.json({ msn: "lista productos", list_pro });
   } catch (err) {
