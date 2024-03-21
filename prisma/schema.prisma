@@ -45,6 +45,7 @@ model producto {
   ESTADO_B        Boolean?          @default(dbgenerated("(true)"))
   FECHA_CREATE_D  DateTime          @default(now()) @db.DateTime(0)
   FECHA_UPDATE_D  DateTime          @default(now()) @db.Timestamp(0)
+  CANTIDAD_STOCK  Int?              @default(0) @db.UnsignedInt
   compra_producto compra_producto[]
 }
 
