@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
 import { env_entorno } from "../../env";
+import { log } from "console";
 
 const prisma = new PrismaClient();
 
@@ -32,12 +33,16 @@ export const authLoginUser = async (req: Request, res: Response) => {
         ID_DNI_C: dni
       }
     })
+
+    console.log(user);
+    
+
     if (!user) {
-      return res.status(500).json({ msj: "Error: no hay usuarios❗️" });
+      return res.status(500).json({ msj: "Error: usuario no existe❗️" });
     }
 
 
-    const pass = bcrypt.compare(password, user.PASSWORD_V)
+    const pass = await bcrypt.compare(password, user.PASSWORD_V)
     if (!pass) {
       return res.status(500).json({ msj: "Error: Password incorrecto❗️" });
     }
@@ -55,6 +60,7 @@ export const authLoginUser = async (req: Request, res: Response) => {
       msj: "Login successfully 😃 ✔️",
       token,
     })
+  
 
 
   } catch (err) {
@@ -68,7 +74,7 @@ export const authLoginUser = async (req: Request, res: Response) => {
 
 //? AUTH MANTIENE LOGIN
 //? ***********************************************************************************************/
-export const postAuthLogin = async (req: Request, res: Response) => {
+export const authorization = async (req: Request, res: Response, next :NextFunction ) => {
   try {
     //si existe el token
     const existeToken = req.header("Authorization");
@@ -83,10 +89,12 @@ export const postAuthLogin = async (req: Request, res: Response) => {
             .status(500)
             .json({ msj: "Error: Authentication failed! 😕 ❗️❗️" });
         } else {
-          return res.json({
-            msj: "Login successfully 😃 ✔️",
-            uuid: userToken,
-          });
+
+          next()
+          // return res.json({
+          //   msj: "Login successfully 😃 ✔️",
+          //   uuid: userToken,
+          // });
         }
       });
     }

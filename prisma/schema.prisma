@@ -22,17 +22,18 @@ model compra {
 }
 
 model compra_producto {
-  COMPRA_ID_I     Int
-  PRODUCTO_ID_I   Int
-  NAME_PRO_V      String   @db.Text
-  PRECIO_COMPRA_D Decimal  @db.Decimal(10, 2)
-  ESTADO_B        Boolean? @default(dbgenerated("(true)"))
-  FECHA_CREATE_D  DateTime @default(now()) @db.DateTime(0)
-  FECHA_UPDATE_D  DateTime @default(now()) @db.Timestamp(0)
-  compra          compra   @relation(fields: [COMPRA_ID_I], references: [ID_COMPRA_I], onDelete: Cascade, map: "FK_compra_pro")
-  producto        producto @relation(fields: [PRODUCTO_ID_I], references: [ID_PRODUCTO_I], onDelete: Cascade, map: "FK_producto_pro")
+  ID_COMPRA_PRODUCTO_I Int      @id @default(autoincrement())
+  COMPRA_ID_I          Int
+  PRODUCTO_ID_I        Int
+  NAME_PRO_V           String   @db.Text
+  PRECIO_COMPRA_D      Decimal  @db.Decimal(10, 2)
+  ESTADO_B             Boolean? @default(dbgenerated("(true)"))
+  FECHA_CREATE_D       DateTime @default(now()) @db.DateTime(0)
+  FECHA_UPDATE_D       DateTime @default(now()) @db.Timestamp(0)
+  compra               compra   @relation(fields: [COMPRA_ID_I], references: [ID_COMPRA_I], onDelete: Cascade, map: "FK_compra_pro")
+  producto             producto @relation(fields: [PRODUCTO_ID_I], references: [ID_PRODUCTO_I], onDelete: Cascade, map: "FK_producto_pro")
 
-  @@id([COMPRA_ID_I, PRODUCTO_ID_I])
+  @@index([COMPRA_ID_I], map: "FK_compra_pro")
   @@index([PRODUCTO_ID_I], map: "FK_producto_pro")
 }
 
