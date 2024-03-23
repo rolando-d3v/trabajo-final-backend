@@ -57,7 +57,7 @@ model usuario {
   NOMBRE_V     String?  @db.VarChar(100)
   CORREO_V     String   @db.VarChar(200)
   PASSWORD_V   String   @db.VarChar(255)
-  FOTO_V       String?  @default(dbgenerated("(_utf8mb4\\'user.png\\')")) @db.VarChar(100)
+  FOTO_V       String?  @default(dbgenerated("('user.png')")) @db.VarChar(100)
   ESTADO_B     Boolean? @default(dbgenerated("(true)"))
   compra       compra[]
 }

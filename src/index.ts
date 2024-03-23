@@ -1,4 +1,4 @@
-import express, { Request, RequestHandler, Response } from "express";
+import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { env_entorno } from "./env";
@@ -21,10 +21,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 // static files
 app.use(express.static("upload"));
-
 
 //routes
 app.use('/auth', authRoutes)

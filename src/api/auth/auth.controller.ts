@@ -1,18 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-// import { v4 as uuidv4 } from "uuid";
-import { RequestHandler } from "express";
 import { PrismaClient } from "@prisma/client";
 import { env_entorno } from "../../env";
-import { log } from "console";
+
 
 const prisma = new PrismaClient();
 
 
 
-//? AUTH AD DOMINIO
+//? AUTH LOGIN
 //? ***********************************************************************************************/
 export const authLoginUser = async (req: Request, res: Response) => {
   try {
@@ -72,7 +69,7 @@ export const authLoginUser = async (req: Request, res: Response) => {
 
 
 
-//? AUTH MANTIENE LOGIN
+//? AUTHORIZATION
 //? ***********************************************************************************************/
 export const authorization = async (req: Request, res: Response, next :NextFunction ) => {
   try {
@@ -91,10 +88,6 @@ export const authorization = async (req: Request, res: Response, next :NextFunct
         } else {
 
           next()
-          // return res.json({
-          //   msj: "Login successfully 😃 ✔️",
-          //   uuid: userToken,
-          // });
         }
       });
     }

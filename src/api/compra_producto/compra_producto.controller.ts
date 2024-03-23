@@ -12,14 +12,11 @@ export const registrarCompra = async (req: Request, res: Response) => {
 
     const { COMPRA_ID_I, PRODUCTO_ID_I } = req.body
 
-
     const pro = await prisma.producto.findFirst({
       where: {
         ID_PRODUCTO_I: parseInt(PRODUCTO_ID_I)
       },
     })
-
-    // console.log(pro?.CANTIDAD_STOCK, "sssssssssss");
 
     const stock = await prisma.producto.findFirst({
       where: {
@@ -28,9 +25,6 @@ export const registrarCompra = async (req: Request, res: Response) => {
       },
     })
 
-
-
-    console.log(!stock);
     console.log(pro);
 
     if (!stock === false) {
@@ -49,21 +43,7 @@ export const registrarCompra = async (req: Request, res: Response) => {
       console.log(user_create);
 
       return res.json({ msn: "Registro success 2023 😃 ✔️" });
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
   } catch (err) {
     console.log(err);
